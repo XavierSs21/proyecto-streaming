@@ -1,7 +1,10 @@
+import Header from "@/components/Header"
 
 const HomePage = () => {
   return (
-    <div>HomePage el mero bueno</div>
+    <div>
+       <Header/>
+    </div>
   )
 }
 
