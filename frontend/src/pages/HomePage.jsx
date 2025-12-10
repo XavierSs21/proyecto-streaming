@@ -1,7 +1,9 @@
 
 const HomePage = () => {
   return (
-    <div>HomePage el mero bueno</div>
+    <div>
+       HOLA ESTE ES EL HOMEPAGE
+    </div>
   )
 }
 
