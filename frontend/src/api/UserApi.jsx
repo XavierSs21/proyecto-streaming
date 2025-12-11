@@ -1,14 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from 'sonner';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// ---------------------------
-// CREATE USER (POST)
-// ---------------------------
 export const useCreateUser = () => {
   return useMutation({
     mutationFn: async (data) => {
-      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+      const res = await fetch(`${API_BASE_URL}/register/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -23,12 +21,19 @@ export const useCreateUser = () => {
 
       return json;
     },
+    onSuccess: () => {
+        toast.success("Usuario creado!")
+    },
+    onError: (error) => {
+        toast.error("Error al crear usuario", {
+            description: error.message,
+        })
+    }
+
   });
 };
 
-// ---------------------------
-// LOGIN USER (POST)
-// ---------------------------
+
 export const useLoginUser = () => {
   const queryClient = useQueryClient();
 
@@ -51,14 +56,12 @@ export const useLoginUser = () => {
     },
 
     onSuccess: () => {
+        
       queryClient.invalidateQueries(["profile"]);
     },
   });
 };
 
-// ---------------------------
-// GET PROFILE (GET con token)
-// ---------------------------
 export const useGetProfile = () => {
   const token = localStorage.getItem("token");
 
@@ -79,16 +82,14 @@ export const useGetProfile = () => {
     ["profile"],
     fetchProfile,
     {
-      enabled: !!token, // solo si hay token
+      enabled: !!token, 
     }
   );
 
   return { profile, isLoading };
 };
 
-// ---------------------------
-// LOGOUT (simple, sin context)
-// ---------------------------
+
 export const useLogout = () => {
   return () => {
     localStorage.removeItem("token");

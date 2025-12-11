@@ -7,6 +7,7 @@ const privateKey = fs.readFileSync("./keys/private.key", "utf8");
 
 const createUser = async (req, res) => {
     try {
+          console.log("hola");
         const { nombre, correo, telefono, pais, password } = req.body;
 
         if (!nombre || !correo || !telefono || !pais || !password) {
