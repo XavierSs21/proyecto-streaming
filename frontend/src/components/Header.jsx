@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import { Clapperboard, Search, Bell } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { useRef } from "react";
+import { Clapperboard, Search, Bell, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,35 +17,68 @@ import {
 } from "@/components/ui/avatar";
 
 const Header = () => {
+  const navRef = useRef(null);
+  const location = useLocation();
+  const pathname = location.pathname || "/";
+  const active = pathname === "/" ? "home" : pathname.startsWith("/movies") ? "movies" : pathname.startsWith("/series") ? "series" : pathname.startsWith("/my-list") ? "mylist" : "";
+
   return (
     <header className="absolute top-0 z-50 w-full bg-gradient-to-b from-black/70 to-transparent">
       <div className="container flex h-14 items-center">
-        {/* Logo y Navegación Principal */}
+        {/* Logo */}
         <div className="mr-4 flex items-center">
-          <Link to="/" className="mr-6 flex items-center space-x-2">
+          <Link to="/" className="mr-6 ml-4 md:ml-6 lg:ml-8 flex items-center space-x-2">
             <Clapperboard className="h-6 w-6 text-yellow-400" />
             <span className="hidden font-bold sm:inline-block text-white">
               IndieStream
             </span>
           </Link>
-          <nav className="hidden items-center space-x-6 text-sm font-medium md:flex">
-            <Link to="/" className="transition-colors text-gray-300 hover:text-yellow-400">
-              Home
-            </Link>
-            <Link to="/movies" className="transition-colors text-gray-300 hover:text-yellow-400">
-              Movies
-            </Link>
-            <Link to="/series" className="transition-colors text-gray-300 hover:text-yellow-400">
-              Series
-            </Link>
-            <Link to="/my-list" className="transition-colors text-gray-300 hover:text-yellow-400">
-              My List
-            </Link>
-          </nav>
         </div>
 
-        {/* Iconos y Perfil a la derecha */}
-        <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+        {/* Navegación, Iconos y Perfil a la derecha */}
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Nav con flechas para desplazarse y selección amarilla */}
+          <div className="hidden items-center md:flex md:space-x-2">
+            <nav
+              ref={navRef}
+              className="max-w-xs overflow-x-auto scrollbar-hide items-center space-x-4 text-sm font-medium"
+              aria-label="Principal"
+            >
+              <Link
+                to="/"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "home" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/movies"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "movies" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Movies
+              </Link>
+              <Link
+                to="/series"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "series" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Series
+              </Link>
+              <Link
+                to="/my-list"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "mylist" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                My List
+              </Link>
+            </nav>
+          </div>
+
           <Button variant="ghost" size="icon" className="h-9 w-9">
             <Search className="h-5 w-5" />
             <span className="sr-only">Buscar</span>

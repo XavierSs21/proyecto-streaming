@@ -1,10 +1,12 @@
 import { Route, Routes, Navigate } from "react-router-dom"
 import HomePage from "./pages/HomePage"
+import Movies from "./pages/Movies"
 
 const AppRoutes = () => {
   return (
     <Routes>
         <Route path="/" element={<HomePage/>}/>
+        <Route path="/movies" element={<Movies/>} />
 
         {/* <Route path="/user-profile" element={<span>USER PROFILE PAGE</span>}/> */}
         <Route path="*" element={<Navigate to ="/"/>}/>
