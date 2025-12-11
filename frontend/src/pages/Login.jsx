@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Film } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -98,9 +98,9 @@ export default function Login() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password" className="text-gray-300">Contraseña</Label>
-                  <a href="#" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
+                    <Link to="/forgot-password" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
                     ¿Olvidaste tu contraseña?
-                  </a>
+                    </Link>
                 </div>
                 <Input
                   id="password"
