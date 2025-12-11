@@ -19,3 +19,7 @@ pnpm-debug.log*
 # Builds
 dist/
 build/
+
+keys/private.key
+keys/public.key
+
