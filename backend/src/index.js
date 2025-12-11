@@ -35,24 +35,29 @@ import UserRoute from "../src/routes/UserRoute.js";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173", // frontend
+  origin: "http://localhost:5173", 
   methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"],
 };
 
-// ⚠️ Importante: cors antes de express.json y de tus rutas
+
+// app.use(cors())
 app.use(cors(corsOptions));
 
 app.use(express.json());
+
+
 
 app.use((req, res, next) => {
   console.log("📥 Petición recibida:", req.method, req.url);
   next();
 });
 // Rutas
+
+app.options("/test", cors(corsOptions));
 app.get("/test", (req,res) => res.json({ message: "Hola!" }));
 app.use("/user", UserRoute);
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));

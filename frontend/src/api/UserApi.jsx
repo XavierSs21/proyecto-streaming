@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const useCreateUser = () => {
   return useMutation({
     mutationFn: async (data) => {
-      const res = await fetch(`${API_BASE_URL}/register/user`, {
+      const res = await fetch(`${API_BASE_URL}/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
