@@ -57,7 +57,7 @@ export default function ForgotPassword() {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
             <Film className="w-10 h-10 text-amber-400 group-hover:rotate-12 transition-transform" />
-            <span className="text-2xl font-bold text-white">IndieStream</span>
+            <span className="text-2xl font-bold text-white group-hover:text-amber-400 transition-colors">IndieStream</span>
           </Link>
         </div>
 

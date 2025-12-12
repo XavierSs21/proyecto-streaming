@@ -87,7 +87,10 @@ export default function Register() {
       {/* Card de registro */}
       <div className="relative z-10 w-full max-w-2xl mx-4">
         <div className="text-center mb-8">
-          <Film className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+          <Link to="/" className="inline-flex items-center gap-3 mb-4 group justify-center">
+              <Film className="w-12 h-12 text-amber-400 group-hover:rotate-12 transition-transform" />
+              <span className="text-3xl font-bold text-white group-hover:text-amber-400 transition-colors">IndieStream</span>
+          </Link>
           <h1 className="text-4xl font-bold text-white mb-2">Únete a IndieStream</h1>
           <p className="text-gray-400">Crea tu cuenta y comienza a explorar</p>
         </div>
