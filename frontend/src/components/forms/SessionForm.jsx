@@ -163,6 +163,12 @@ const SessionForm = ({ mode, onSubmit, isLoading = false }) => {
           "Crear Cuenta"
         )}
       </Button>
+      <p className="text-center text-sm text-gray-400">
+                ¿No tienes cuenta?{' '}
+                <a href="/register" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
+                  Regístrate gratis
+                </a>
+              </p>
     </form>
   );
 };

@@ -91,4 +91,24 @@ const loginUser = async (req, res) => {
     }
 };
 
-export default { createUser, loginUser };
+const forgotPasswod = async(req, res) => {
+    try{
+        const {correo} = req.body;
+
+        const existingUser = User.findOne({correo})
+
+        if(!existingUser){
+            res.status(404).json({message: "Usuario no existe"})
+            return;
+        }
+        
+        
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({message: "algo ocurrio"})
+    }
+
+}
+
+export default { createUser, loginUser, forgotPasswod };
