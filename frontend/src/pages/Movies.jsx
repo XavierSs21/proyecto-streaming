@@ -44,7 +44,7 @@ const Movies = () => {
   }, [selectedAllMoviesGenre, selectedLetter, sortType]);
 
   return (
-    <div className="text-white pt-12">{/* add extra top padding so header doesn't overlap */}
+    <div className="text-white pt-8">{/* reduce top padding so Movies title sits closer to header */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-3">

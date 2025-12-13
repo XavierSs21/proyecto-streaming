@@ -8,7 +8,7 @@ function App() {
   return (
     <HashRouter>
       <Header />
-      <main className="min-h-screen"> {/* Añadimos min-h-screen para asegurar que el main ocupe toda la altura */}
+      <main className="min-h-screen pt-14 px-4 md:px-8 py-8"> {/* Añadimos padding global para dar más espacio a las páginas */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/movies" element={<Movies />} />
