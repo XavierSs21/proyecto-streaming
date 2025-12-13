@@ -1,28 +1,25 @@
-
-import express from "express";
-import cors from "cors";
-import "dotenv/config";
+import express from "express"
+import cors from "cors"
+import "dotenv/config"
 import connectDB from "../config/database.js";
-import UserRoute from "../src/routes/UserRoute.js";
- connectDB();
+import UserRoute from "../src/routes/UserRoute.js"
+import MovieRoute from "./routes/movieRoutes.js"
 
 const app = express();
-
-// const corsOptions = {
-//   origin: "http://localhost:5173", 
-//   methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
-//   allowedHeaders: ["Content-Type","Authorization"],
-// };
-
-
-app.use(cors())
-// app.use(cors(corsOptions));
-
 app.use(express.json());
+app.use(cors());
 
-app.get("/test", (req,res) => res.json({ message: "Hola!" }));
+connectDB();
+
+app.get("/test", (req, res)=> {
+    res.json({message: "Hola!"});
+})
+
 app.use("/user", UserRoute);
-
+app.use("/movies", MovieRoute)
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
+
+app.listen(8000, () => {
+    console.log(`servidor corriendo en localhost:${PORT}`);
+})
