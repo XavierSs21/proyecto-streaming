@@ -1,10 +1,19 @@
+import Hero from '@/components/Home/Hero'
+import FeaturedCarousel from '@/components/Home/FeaturedCarrousel';
+import CategorySection from '@/components/Home/CategorySection';
+import RecommendedSection from '@/components/Home/RecommendedSection';
+import CreatorsSection from '@/components/Home/CreatorsSection';
 
-const HomePage = () => {
+export default function HomePage() {
   return (
-    <div>
-       HOLA ESTE ES EL HOMEPAGE
+    <div className="min-h-screen bg-black">
+      {/* <Header /> */}
+      <Hero />
+      <FeaturedCarousel />
+      <CategorySection />
+      <RecommendedSection />
+      <CreatorsSection />
+      {/* <Footer /> */}
     </div>
-  )
+  );
 }
-
-export default HomePage
