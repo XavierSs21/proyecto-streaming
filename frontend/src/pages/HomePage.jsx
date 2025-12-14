@@ -10,12 +10,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-black">
       <Header />
+      {/* <Header /> */}
       <Hero />
       <FeaturedCarousel />
       <CategorySection />
       <RecommendedSection />
       <CreatorsSection />
       <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
