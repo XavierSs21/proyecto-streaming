@@ -132,6 +132,17 @@ const SessionForm = ({ mode, onSubmit, isLoading = false }) => {
         </div>
       )}
 
+{mode === "login" && (
+  <div className="flex justify-end">
+    <a
+      href="/forgot-password"
+      className="text-sm text-amber-400 hover:text-amber-300 transition-colors"
+    >
+      ¿Olvidaste tu contraseña?
+    </a>
+  </div>
+
+)}
       <form.Field name="password">
         {(field) => (
           <div className="space-y-2">

@@ -2,6 +2,9 @@ import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import nodemailer from "nodemailer"
+import crypto from "crypto";
+
 
 const privateKey = fs.readFileSync("./keys/private.key", "utf8");
 
@@ -91,24 +94,89 @@ const loginUser = async (req, res) => {
     }
 };
 
-const forgotPasswod = async(req, res) => {
+const forgotPassword = async(req, res) => {
     try{
         const {correo} = req.body;
 
-        const existingUser = User.findOne({correo})
+        const user = await User.findOne({correo})
 
-        if(!existingUser){
+        if(!user){
             res.status(404).json({message: "Usuario no existe"})
             return;
         }
+
+        const resetToken = crypto.randomBytes(32).toString("hex");
+
+        user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+
+
+        user.resetPasswordExpires = Date.now() + 1000 * 60 * 15;
+        await user.save();
+
+        const resetUrl = process.env.FRONTEND_URL + `/reset-password/${resetToken}`;
+
+        const transporter = nodemailer.createTransport({service: "gmail", auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        }})
+
+        await transporter.sendMail({
+            from: '"IndieStream" <no-reply@indiestream.com>',
+            to: user.correo,
+            subject: "Recuperar contrasena",
+            html: `
+                <h2>Recuperar contraseña</h2>
+                <p>Haz clic en el enlace para cambiar tu contraseña:</p>
+                <a href="${resetUrl}">${resetUrl}</a>
+                <p>Este enlace expira en 15 minutos.</p>
+            `,
+                    
+            })
+                
+            res.json({ message: "Correo de recuperación enviado" });
         
-        
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({message: "no se pudo enviar el correo"})
+    }
+
+}
+
+const resetPassword = async(req, res) => {
+    try{
+        const {token} = req.params;
+        const {password} = req.body;
+
+        const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+        const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { $gt: Date.now() },
+        });
+
+        if (!user) {
+        return res.status(400).json({ message: "Token inválido o expirado" });
+        }
+
+        user.password = await bcrypt.hash(password, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        await user.save();
+
+        res.json({ message: "Contraseña actualizada correctamente" });
+
 
     }catch(error){
         console.log(error);
         res.status(500).json({message: "algo ocurrio"})
     }
-
 }
 
-export default { createUser, loginUser, forgotPasswod };
+export default { 
+    createUser, 
+    loginUser, 
+    forgotPassword,
+    resetPassword,
+ };

@@ -96,3 +96,58 @@ export const useLogout = () => {
     window.location.href = "/login";
   };
 };
+
+export const useForgotPassword = () => {
+  return useMutation({
+    mutationFn: async (data) => {
+      const res = await fetch(`${API_BASE_URL}/user/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // { correo }
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Error enviando correo");
+
+      return json;
+    },
+    onSuccess: () => {
+      toast.success("Correo de recuperación enviado 📩");
+    },
+    onError: (error) => {
+      toast.error("Error", {
+        description: error.message,
+      });
+    },
+  });
+};
+
+
+export const useResetPassword = () => {
+  return useMutation({
+    mutationFn: async ({ token, password }) => {
+      const res = await fetch(`${API_BASE_URL}/user/reset-password/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || "Error al cambiar contraseña");
+
+      return json;
+    },
+    onSuccess: () => {
+      toast.success("Contraseña actualizada correctamente 🔐");
+    },
+    onError: (error) => {
+      toast.error("Error", {
+        description: error.message,
+      });
+    },
+  });
+};
