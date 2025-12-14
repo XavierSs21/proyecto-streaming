@@ -1,10 +1,6 @@
 import * as React from "react"
 import useEmblaCarousel from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react"
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/feat/paloma_login
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 

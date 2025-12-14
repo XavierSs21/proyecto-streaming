@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Film } from 'lucide-react';
-import { Link } from 'react-router-dom'
 import { useLoginUser } from '@/api/UserApi';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Film } from 'lucide-react';
 import SessionForm from '@/components/forms/SessionForm';
 
 export default function LoginPage() {
@@ -46,65 +42,6 @@ export default function LoginPage() {
             <p className="text-gray-400 text-sm">Cine independiente a tu alcance</p>
           </div>
 
-          {/* Card sin bordes visibles, solo contenido */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-2">Iniciar Sesión</h2>
-              <p className="text-gray-400">
-                Accede a tu colección de películas
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-amber-500 focus:ring-amber-500/20 h-12"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-gray-300">Contraseña</Label>
-                    <Link to="/forgot-password" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
-                    ¿Olvidaste tu contraseña?
-                    </Link>
-                </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-amber-500 focus:ring-amber-500/20 h-12"
-                />
-              </div>
-
-              <Button 
-                type="submit" 
-                className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 text-base transition-colors" 
-                disabled={isLoading}
-              >
-                {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-              </Button>
-
-              <p className="text-center text-sm text-gray-400">
-                ¿No tienes cuenta?{' '}
-                <a href="/register" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
-                  Regístrate gratis
-                </a>
-              </p>
-            </form>
-          </div>
           {/* Card con SessionForm */}
           <Card className="backdrop-blur-xl bg-zinc-950/80 border-zinc-800/50 shadow-2xl">
             <CardHeader>
