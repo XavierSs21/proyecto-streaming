@@ -7,16 +7,19 @@ import {
 
 const router = express.Router();
 
-import {auth} from '../middleware/auth.js'
+import { adminAuth } from '../middleware/adminAuth.js';
 
-router.post("/",auth, upload.fields([
+// Ruta pública - ver películas por género
+router.get("/genre/:genre", getMoviesByGenre);
+
+// Ruta protegida - crear películas
+router.post("/", 
+  adminAuth,
+  upload.fields([
     { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 }
   ]),
   createMovie
 );
-
-//obtener peli por genero
-router.get("/genre/:genre",auth, getMoviesByGenre);
 
 export default router;
