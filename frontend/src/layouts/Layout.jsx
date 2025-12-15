@@ -1,19 +1,18 @@
 import Header from '@/components/Header'
-import Footer from '@/components/Home/Footer'
-import React from 'react'
+import { useLocation } from 'react-router-dom';
 
-const Layout = ({children}) => {
-  return (
-    <div className='flex flex-col min-h-screen'>
-        <Header/>
+const Layout = ({ children }) => {
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
-        <div className='container mx-auto flex-1 py-10 bg-red'>
-            {children}
+    return (
+        <div className='flex flex-col min-h-screen'>
+            <Header />
+            <div className={`flex-1 ${!isHomePage ? 'container mx-auto py-10' : ''}`}>
+                {children}
+            </div>
         </div>
-      
-        <Footer/>
-    </div>
-  )
+    )
 }
 
-export default Layout
+export default Layout;

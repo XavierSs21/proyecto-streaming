@@ -1,115 +1,84 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Film, Search, Menu, X, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
+import { useRef } from "react";
+import { Clapperboard } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const Header = () => {
+  const navRef = useRef(null);
+  const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const pathname = location.pathname || "/";
+  const active = pathname === "/" ? "home" : pathname.startsWith("/movies") ? "movies" : pathname.startsWith("/series") ? "series" : pathname.startsWith("/my-list") ? "mylist" : "";
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-black/95 backdrop-blur-lg shadow-lg' 
-          : 'bg-gradient-to-b from-black/80 to-transparent'
-      }`}
-    >
-      <nav className="container mx-auto px-6 lg:px-12 py-4">
-        <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <Film className="w-8 h-8 text-amber-400 group-hover:rotate-12 transition-transform" />
-            <span className="text-2xl font-bold text-white">IndieStream</span>
+    <header className="absolute top-0 z-50 w-full bg-gradient-to-b from-black/70 to-transparent">
+      <div className="container px-0 flex h-14 items-center"> 
+        {/* Logo */}
+        <div className="mr-4 flex items-center">
+          <Link to="/" className="mr-6 ml-4 md:ml-6 lg:ml-8 flex items-center space-x-2">
+            <Clapperboard className="h-6 w-6 text-yellow-400" />
+            <span className="hidden font-bold sm:inline-block text-white">
+              IndieStream
+            </span>
           </Link>
-
-          <div className="hidden lg:flex items-center gap-8">
-            <a href="#inicio" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-              Inicio
-            </a>
-            <a href="#peliculas" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-              Películas
-            </a>
-            <a href="#categorias" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-              Categorías
-            </a>
-            <a href="#creadores" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-              Creadores
-            </a>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              className="text-gray-300 hover:text-amber-400 hover:bg-white/10"
-            >
-              <Search className="w-5 h-5" />
-            </Button>
-            <Link to="/login">
-              <Button 
-                variant="ghost"
-                className="text-gray-300 hover:text-white hover:bg-white/10"
-              >
-                <User className="w-5 h-5 mr-2" />
-                Iniciar sesión
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button className="bg-amber-500 hover:bg-amber-600 text-black font-semibold">
-                Registrarse
-              </Button>
-            </Link>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden text-white"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </Button>
         </div>
 
-        {isMobileMenuOpen && (
-          <div className="lg:hidden mt-4 pb-4 border-t border-zinc-800 pt-4 animate-fade-in">
-            <div className="flex flex-col gap-4">
-              <a href="#inicio" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-                Inicio
-              </a>
-              <a href="#peliculas" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-                Películas
-              </a>
-              <a href="#categorias" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-                Categorías
-              </a>
-              <a href="#creadores" className="text-gray-300 hover:text-amber-400 transition-colors font-medium">
-                Creadores
-              </a>
-              <div className="flex flex-col gap-2 pt-4 border-t border-zinc-800">
-                <Link to="/login">
-                  <Button variant="outline" className="w-full border-zinc-700 text-white">
-                    Iniciar sesión
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black">
-                    Registrarse
-                  </Button>
-                </Link>
-              </div>
-            </div>
+        {/* Navegación, Iconos y Perfil a la derecha */}
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          {/* Nav con flechas para desplazarse y selección amarilla */}
+          <div className="hidden items-center md:flex md:space-x-2">
+            <nav
+              ref={navRef}
+              className="max-w-xs overflow-x-auto scrollbar-hide items-center space-x-4 text-sm font-medium"
+              aria-label="Principal"
+            >
+              <Link
+                to="/"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "home" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/movies"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "movies" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Movies
+              </Link>
+              <Link
+                to="/series"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "series" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                Series
+              </Link>
+              <Link
+                to="/my-list"
+                className={`inline-block px-3 py-1 rounded transition-colors ${
+                  active === "mylist" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
+                }`}
+              >
+                My List
+              </Link>
+            </nav>
           </div>
-        )}
-      </nav>
+
+          <div className="flex items-center space-x-2">
+            <Button asChild variant="outline" className="border-amber-400 text-amber-400 hover:bg-amber-400 hover:text-black">
+              <Link to="/login">Login</Link>
+            </Button>
+            <Button asChild className="bg-amber-500 text-black hover:bg-amber-600">
+              <Link to="/register">Register</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
     </header>
   );
-}
+};
+
+export default Header;

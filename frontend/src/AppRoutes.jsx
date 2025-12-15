@@ -7,11 +7,13 @@ import ForgotPassword from "./pages/ForgotPassword"
 import AdminPage from "./pages/AdminPage"
 import ResetPassword from "./pages/ResetPassword"
 import ProtectedRoute from "./components/ProtectedRoute"
+import Movies from "./pages/Movies"
 
 const AppRoutes = () => {
   return (
     <Routes>
         <Route path="/" element={<Layout><HomePage/></Layout>}/>
+        <Route path="/movies" element={<Layout><Movies/></Layout>}/>
         <Route path="*" element={<Navigate to ="/"/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register />} />
