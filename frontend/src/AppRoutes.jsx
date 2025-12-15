@@ -6,6 +6,7 @@ import Register from "./pages/Register"
 import ForgotPassword from "./pages/ForgotPassword"
 import AdminPage from "./pages/AdminPage"
 import ResetPassword from "./pages/ResetPassword"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const AppRoutes = () => {
   return (
@@ -15,7 +16,14 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/admin-page" element={<AdminPage/>}/>
+        <Route 
+          path="/admin-page" 
+          element={
+            <ProtectedRoute>
+              <AdminPage/>
+            </ProtectedRoute>
+          }
+        />
         <Route path="/reset-password" element={<ResetPassword/>}/>
     </Routes>
   )
