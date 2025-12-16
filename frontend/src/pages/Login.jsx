@@ -10,17 +10,37 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
+  // const handleLogin = async (values) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await loginUser.mutateAsync(values);
+  //     navigate('/home-page'); 
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const handleLogin = async (values) => {
-    setIsLoading(true);
-    try {
-      await loginUser.mutateAsync(values);
-      navigate('/home-page'); 
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
+  setIsLoading(true);
+  try {
+    const data = await loginUser.mutateAsync(values);
+
+ 
+    if (data?.user?.rol === "admin") {
+      navigate("/admin-page", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
-  };
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const featuredMovies = [
     { title: "El Laberinto" },

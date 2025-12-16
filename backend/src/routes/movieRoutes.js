@@ -14,7 +14,6 @@ router.get("/genre/:genre", getMoviesByGenre);
 
 // Ruta protegida - crear películas
 router.post("/", 
-  adminAuth,
   upload.fields([
     { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 }

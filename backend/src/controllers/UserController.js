@@ -47,6 +47,7 @@ const createUser = async (req, res) => {
                 correo: newUser.correo,
                 telefono: newUser.telefono,
                 pais: newUser.pais,
+                rol: newUser.rol,
                 createdAt: newUser.createdAt,
             }
         });
@@ -83,6 +84,7 @@ const loginUser = async (req, res) => {
                 id: user._id,
                 nombre: user.nombre,
                 correo: user.correo,
+                rol: user.rol,
                 telefono: user.telefono,
                 pais: user.pais,
                 createdAt: user.createdAt,
@@ -174,9 +176,25 @@ const resetPassword = async(req, res) => {
     }
 }
 
+const getCurrentUser = async(req, res) => {
+    try{
+         const currentuser = await User.findById({ _id: req.user._id});
+        if(!currentuser){
+            res.status(404).json({message: "User not found"});
+            return
+        }
+        res.json(currentuser);
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({message: "Error fetching user"});
+    }
+}
+
 export default { 
     createUser, 
     loginUser, 
     forgotPassword,
     resetPassword,
+    getCurrentUser,
  };
