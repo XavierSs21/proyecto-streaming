@@ -1,61 +1,52 @@
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
+import { useLoginUser } from '@/api/UserApi';
+import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Film } from 'lucide-react';
+import SessionForm from '@/components/forms/SessionForm';
 
-export default function Login() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+export default function LoginPage() {
+  const loginUser = useLoginUser();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
+  // const handleLogin = async (values) => {
+  //   setIsLoading(true);
+  //   try {
+  //     await loginUser.mutateAsync(values);
+  //     navigate('/home-page'); 
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleLogin = async (values) => {
+  setIsLoading(true);
+  try {
+    const data = await loginUser.mutateAsync(values);
+
+ 
+    if (data?.user?.rol === "admin") {
+      navigate("/admin-page", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const featuredMovies = [
     { title: "El Laberinto" },
     { title: "Sombras" },
     { title: "Luna Roja" },
   ];
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success("¡Bienvenido!", {
-          description: "Has iniciado sesión correctamente",
-        });
-      } else {
-        toast.error("Error al iniciar sesión", {
-          description: data.message || "Credenciales incorrectas",
-        });
-      }
-    } catch (error) {
-      toast.error("Error de conexión", {
-        description: "No se pudo conectar con el servidor",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
 
   return (
     <div className="min-h-screen flex">
@@ -71,83 +62,32 @@ export default function Login() {
             <p className="text-gray-400 text-sm">Cine independiente a tu alcance</p>
           </div>
 
-          {/* Card sin bordes visibles, solo contenido */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-2">Iniciar Sesión</h2>
-              <p className="text-gray-400">
-                Accede a tu colección de películas
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-gray-300">Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-amber-500 focus:ring-amber-500/20 h-12"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-gray-300">Contraseña</Label>
-                  <a href="#" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
-                    ¿Olvidaste tu contraseña?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-amber-500 focus:ring-amber-500/20 h-12"
-                />
-              </div>
-
-              <Button 
-                type="submit" 
-                className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-12 text-base transition-colors" 
-                disabled={isLoading}
-              >
-                {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-              </Button>
-
-              <p className="text-center text-sm text-gray-400">
-                ¿No tienes cuenta?{' '}
-                <a href="/register" className="text-amber-400 hover:text-amber-300 font-medium transition-colors">
-                  Regístrate gratis
-                </a>
-              </p>
-            </form>
-          </div>
+          {/* Card con SessionForm */}
+          <Card className="backdrop-blur-xl bg-zinc-950/80 border-zinc-800/50 shadow-2xl">
+            <CardHeader>
+              <CardTitle className="text-white text-2xl">Login</CardTitle>
+              <CardDescription className="text-gray-400">
+                Ingresa tus credenciales
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <SessionForm mode="login" onSubmit={handleLogin} />
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      {/* Lado derecho - Showcase de películas */}
+      {/* Lado derecho - Showcase */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-gray-900 via-zinc-900 to-black items-center justify-center p-16 relative overflow-hidden">
-        {/* Efectos de brillo sutiles con amarillo */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-600/5 rounded-full blur-3xl"></div>
 
         <div className="relative z-10 text-white text-center max-w-2xl">
-          <h2 className="text-5xl font-bold mb-6 leading-tight">
-            Descubre cine independiente
-          </h2>
+          <h2 className="text-5xl font-bold mb-6 leading-tight">Descubre cine independiente</h2>
           <p className="text-xl text-gray-300 mb-12 leading-relaxed">
-            Historias únicas de cineastas emergentes. 
-            Tu próxima película favorita te está esperando.
+            Historias únicas de cineastas emergentes. Tu próxima película favorita te está esperando.
           </p>
-          
+
           <div className="grid grid-cols-3 gap-6">
             {featuredMovies.map((movie, index) => (
               <div 
