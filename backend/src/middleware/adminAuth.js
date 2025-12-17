@@ -26,7 +26,7 @@ export const adminAuth = async (req, res, next) => {
             return res.status(401).json({ message: "Usuario no encontrado" });
         }
 
-        if (user.role !== "admin") {
+        if (user.rol !== "admin") {
             return res.status(403).json({ message: "Acceso denegado. Solo administradores" });
         }
 
