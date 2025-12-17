@@ -11,7 +11,6 @@ export default function Register() {
   const handleRegister = async (values) => {
     try {
       await createUser.mutateAsync(values);
-      // toast.success("¡Cuenta creada!");
     } catch (error) {
       console.log(error)
     }

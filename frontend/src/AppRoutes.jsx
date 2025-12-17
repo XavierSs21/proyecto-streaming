@@ -9,23 +9,33 @@ import ResetPassword from "./pages/ResetPassword"
 import ProtectedRoute from "./components/ProtectedRoute"
 import Movies from "./pages/Movies"
 import MoviePlayer from "./pages/MoviePlayer"
+import MyListPage from "./pages/MyListPage"
 
 const AppRoutes = () => {
   return (
     <Routes>
         <Route path="/" element={<Layout><HomePage/></Layout>}/>
-        <Route path="/movies" element={<Layout><Movies/></Layout>}/>
-        <Route path="/movie/:id" element={<MoviePlayer/>}/>
+        
+
+        <Route element= {<ProtectedRoute allowedRoles={["cliente", "admin"]}/>}>
+            <Route path="/movie/:id" element={<MoviePlayer/>}/>
+            <Route path="/my-list" element={<Layout><MyListPage /></Layout>} />
+            <Route path="/movies" element={<Layout><Movies/></Layout>}/>
+
+        </Route>
+        
+
         <Route path="*" element={<Navigate to ="/"/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        
        
         <Route element={<ProtectedRoute allowedRoles={"admin"} />}>
         <Route path="/admin-page" element={<AdminPage />} />
         </Route>
 
-        <Route path="/reset-password" element={<ResetPassword/>}/>
+        <Route path="/reset-password/:token" element={<ResetPassword/>}/>
     </Routes>
   )
 }
