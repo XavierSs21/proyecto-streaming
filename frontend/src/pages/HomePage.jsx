@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import GenreFilter from "@/components/GenreFilter";
 import AlphabetFilter from "@/components/AlphabetFilter";
+import { Link } from 'react-router-dom';
 
 const featuredMovies = [
   { id: 1, title: "El Viaje Silencioso", director: "Ana García", imageUrl: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=2825&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", year: 2022, puntaje: 4.5, genre: "Drama" },
@@ -82,21 +83,23 @@ const HomePage = () => {
             <CarouselContent>
               {filteredNewReleases.map((movie) => (
                 <CarouselItem key={movie.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 p-2">
-                  <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-                    <CardContent className="p-0">
-                      <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
-                      <div className="p-2">
-                        <h3 className="font-bold truncate">{movie.title}</h3>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
-                          <p className="truncate">Dir. {movie.director}</p>
-                          <div className="flex items-center gap-1">
-                            <Star className="size-3 fill-yellow-400 text-yellow-400" />
-                            <span>{movie.puntaje}</span>
+                  <Link to={`/movie/${movie.id}`}>
+                    <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+                      <CardContent className="p-0">
+                        <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
+                        <div className="p-2">
+                          <h3 className="font-bold truncate">{movie.title}</h3>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <p className="truncate">Dir. {movie.director}</p>
+                            <div className="flex items-center gap-1">
+                              <Star className="size-3 fill-yellow-400 text-yellow-400" />
+                              <span>{movie.puntaje}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -112,21 +115,23 @@ const HomePage = () => {
             <CarouselContent>
               {filteredPopularMovies.map((movie) => (
                 <CarouselItem key={movie.id} className="basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 p-2">
-                  <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-                    <CardContent className="p-0">
-                      <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
-                      <div className="p-2">
-                        <h3 className="font-bold truncate">{movie.title}</h3>
-                        <div className="flex items-center justify-between text-sm text-muted-foreground">
-                          <p className="truncate">Dir. {movie.director}</p>
-                          <div className="flex items-center gap-1">
-                            <Star className="size-3 fill-yellow-400 text-yellow-400" />
-                            <span>{movie.puntaje}</span>
+                  <Link to={`/movie/${movie.id}`}>
+                    <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+                      <CardContent className="p-0">
+                        <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
+                        <div className="p-2">
+                          <h3 className="font-bold truncate">{movie.title}</h3>
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
+                            <p className="truncate">Dir. {movie.director}</p>
+                            <div className="flex items-center gap-1">
+                              <Star className="size-3 fill-yellow-400 text-yellow-400" />
+                              <span>{movie.puntaje}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 </CarouselItem>
               ))}
             </CarouselContent>
@@ -169,21 +174,23 @@ const HomePage = () => {
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {allMovies.map((movie) => (
               <div key={movie.id} className="p-2">
-                <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
-                  <CardContent className="p-0">
-                    <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
-                    <div className="p-2">
-                      <h3 className="font-bold truncate">{movie.title}</h3>
-                      <div className="flex items-center justify-between text-sm text-muted-foreground">
-                        <p className="truncate">Dir. {movie.director}</p>
-                        <div className="flex items-center gap-1">
-                          <Star className="size-3 fill-yellow-400 text-yellow-400" />
-                          <span>{movie.puntaje}</span>
+                <Link to={`/movie/${movie.id}`}>
+                  <Card className="cursor-pointer overflow-hidden border-0 bg-transparent p-0 transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-xl">
+                    <CardContent className="p-0">
+                      <img src={movie.imageUrl} alt={movie.title} className="w-full h-48 object-cover rounded-md" />
+                      <div className="p-2">
+                        <h3 className="font-bold truncate">{movie.title}</h3>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <p className="truncate">Dir. {movie.director}</p>
+                          <div className="flex items-center gap-1">
+                            <Star className="size-3 fill-yellow-400 text-yellow-400" />
+                            <span>{movie.puntaje}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </Link>
               </div>
             ))}
           </div>

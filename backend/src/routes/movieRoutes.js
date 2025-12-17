@@ -6,9 +6,9 @@ const router = express.Router();
 import { adminAuth } from "../middleware/adminAuth.js";
 import movieController from "../controllers/movieController.js";
 
-
+router.get("/",  movieController.getAllMovies);
 router.get("/genre/:genre", movieController.getMoviesByGenre);
-
+router.get("/:id", movieController.getMovieById);
 
 router.post("/", adminAuth,
   upload.fields([
@@ -18,8 +18,7 @@ router.post("/", adminAuth,
   movieController.createMovie
 );
 
-router.get("/",  movieController.getAllMovies)
-router.put("/:id",adminAuth, upload.fields([{ name: "video", maxCount: 1 },{ name: "thumbnail", maxCount: 1 }]) , movieController.updateMovie)
-router.delete("/:id", adminAuth, movieController.deleteMovie)
+router.put("/:id",adminAuth, upload.fields([{ name: "video", maxCount: 1 },{ name: "thumbnail", maxCount: 1 }]) , movieController.updateMovie);
+router.delete("/:id", adminAuth, movieController.deleteMovie);
 
 export default router;
