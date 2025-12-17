@@ -88,6 +88,7 @@ if (process.env.NODE_ENV !== 'production') {
 // Helper para log de requests
 export const logRequest = (req, message, level = 'info') => {
   logger.log(level, message, {
+    requestId: req.requestId,
     method: req.method,
     url: req.originalUrl,
     ip: req.ip,

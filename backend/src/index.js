@@ -5,11 +5,26 @@ import connectDB from "../config/database.js";
 import UserRoute from "../src/routes/UserRoute.js"
 import MovieRoute from "./routes/movieRoutes.js"
 
+import logger from "../config/logger.js";
+import morganMiddleware from "./middleware/morganMiddleware.js";
+import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
+
+import { requestIdMiddleware } from "./middleware/requestIdMiddleware.js";
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use(requestIdMiddleware);
+app.use(morganMiddleware);
+
+
 connectDB();
+
+logger.info('Iniciando servidor indieStream...', {
+  port: process.env.PORT || 8000,
+  environment: process.env.NODE_ENV || 'development',
+});
 
 app.get("/test", (req, res)=> {
     res.json({message: "Hola!"});
@@ -18,8 +33,32 @@ app.get("/test", (req, res)=> {
 app.use("/user", UserRoute);
 app.use("/movies", MovieRoute)
 
-const PORT = process.env.PORT || 8000;
+app.get("/health", (req, res) => {
+  logger.info('Health check solicitado');
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
+});
 
-app.listen(8000, () => {
-    console.log(`servidor corriendo en localhost:${PORT}`);
-})
+app.use(notFoundHandler);
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 8000;  
+
+app.listen(PORT, () => {
+  logger.info(`Servidor corriendo exitosamente en el puerto ${PORT}`);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  logger.error('Unhandled Rejection', { reason });
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception', {
+    message: error.message,
+    stack: error.stack,
+  });
+  process.exit(1);
+});
