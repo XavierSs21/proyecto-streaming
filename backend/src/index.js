@@ -12,12 +12,14 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 import { requestIdMiddleware } from "./middleware/requestIdMiddleware.js";
 import { generalLimiter } from "./middleware/rateLimiter.js";
+import { performanceMonitor } from "./middleware/performanceMonitor.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 app.use(requestIdMiddleware);
+app.use(performanceMonitor);
 app.use(morganMiddleware);
 app.use(generalLimiter);
 
