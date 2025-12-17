@@ -11,14 +11,18 @@ import morganMiddleware from "./middleware/morganMiddleware.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 import { requestIdMiddleware } from "./middleware/requestIdMiddleware.js";
+import { generalLimiter } from "./middleware/rateLimiter.js";
+import { performanceMonitor } from "./middleware/performanceMonitor.js";
+import { healthCheck } from "./controllers/HealthController.js";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 app.use(requestIdMiddleware);
+app.use(performanceMonitor);
 app.use(morganMiddleware);
-
+app.use(generalLimiter);
 
 connectDB();
 
@@ -35,14 +39,7 @@ app.use("/user", UserRoute);
 app.use("/movies", MovieRoute)
 app.use("/list", ListRoute);
 
-app.get("/health", (req, res) => {
-  logger.info('Health check solicitado');
-  res.status(200).json({
-    status: "OK",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-  });
-});
+app.get("/health", healthCheck);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
