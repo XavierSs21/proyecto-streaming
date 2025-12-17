@@ -1,24 +1,25 @@
 import express from "express";
 import upload from "../middleware/upload.js";
-import {
-  createMovie,
-  getMoviesByGenre
-} from "../controllers/movieController.js";
 
 const router = express.Router();
 
-import { adminAuth } from '../middleware/adminAuth.js';
+import { adminAuth } from "../middleware/adminAuth.js";
+import movieController from "../controllers/movieController.js";
 
-// Ruta pública - ver películas por género
-router.get("/genre/:genre", getMoviesByGenre);
 
-// Ruta protegida - crear películas
-router.post("/", 
+router.get("/genre/:genre", movieController.getMoviesByGenre);
+
+
+router.post("/", adminAuth,
   upload.fields([
     { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 }
   ]),
-  createMovie
+  movieController.createMovie
 );
+
+router.get("/",  movieController.getAllMovies)
+router.put("/:id",adminAuth, upload.fields([{ name: "video", maxCount: 1 },{ name: "thumbnail", maxCount: 1 }]) , movieController.updateMovie)
+router.delete("/:id", adminAuth, movieController.deleteMovie)
 
 export default router;

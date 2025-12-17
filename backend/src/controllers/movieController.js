@@ -1,6 +1,6 @@
-import Movie from "../models/Movie.js";
+import Movie from "../models/movie.js";
 
-export const createMovie = async (req, res) => {
+const createMovie = async (req, res) => {
   try {
     const {
       title,
@@ -37,7 +37,7 @@ export const createMovie = async (req, res) => {
   }
 };
 
-export const getMoviesByGenre = async (req, res) => {
+const getMoviesByGenre = async (req, res) => {
   try {
     const { genre } = req.params;
     const movies = await Movie.find({ genre }).sort({ createdAt: -1 });
@@ -47,7 +47,7 @@ export const getMoviesByGenre = async (req, res) => {
   }
 };
 
-export const getAllMovies = async (req, res) => {
+const getAllMovies = async (req, res) => {
   try {
     const movies = await Movie.find().sort({ createdAt: -1 });
     res.json(movies);
@@ -56,7 +56,7 @@ export const getAllMovies = async (req, res) => {
   }
 };
 
-export const getMovieById = async (req, res) => {
+const getMovieById = async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id);
     if (!movie) {
@@ -68,7 +68,7 @@ export const getMovieById = async (req, res) => {
   }
 };
 
-export const updateMovie = async (req, res) => {
+const updateMovie = async (req, res) => {
   try {
     const {
       title,
@@ -114,8 +114,7 @@ export const updateMovie = async (req, res) => {
     res.status(500).json({ message: "Error al actualizar película" });
   }
 };
-
-export const deleteMovie = async (req, res) => {
+const deleteMovie = async (req, res) => {
   try {
     const movie = await Movie.findByIdAndDelete(req.params.id);
     
@@ -128,3 +127,13 @@ export const deleteMovie = async (req, res) => {
     res.status(500).json({ message: "Error al eliminar película" });
   }
 };
+
+
+export default {
+  getAllMovies,
+  createMovie,
+  getMovieById,
+  deleteMovie,
+  updateMovie,
+  getMoviesByGenre,
+}
