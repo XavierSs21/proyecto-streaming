@@ -1,5 +1,5 @@
 import express from "express";
-import upload from "../middleware/upload.js";
+import upload, { handleUploadError } from "../middleware/upload.js";
 import { adminAuth } from "../middleware/adminAuth.js";
 import movieController from "../controllers/movieController.js";
 import { createMovieLimiter } from "../middleware/rateLimiter.js";
@@ -19,6 +19,7 @@ router.post("/",
     { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 }
   ]),
+  handleUploadError,
   movieController.createMovie
 );
 
@@ -27,6 +28,7 @@ router.put("/:id", adminAuth,
     { name: "video", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 }
   ]), 
+  handleUploadError,
   movieController.updateMovie
 );
 
