@@ -11,6 +11,7 @@ import morganMiddleware from "./middleware/morganMiddleware.js";
 import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 
 import { requestIdMiddleware } from "./middleware/requestIdMiddleware.js";
+import { generalLimiter } from "./middleware/rateLimiter.js";
 
 const app = express();
 app.use(express.json());
@@ -18,7 +19,7 @@ app.use(cors());
 
 app.use(requestIdMiddleware);
 app.use(morganMiddleware);
-
+app.use(generalLimiter);
 
 connectDB();
 
