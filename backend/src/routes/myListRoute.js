@@ -5,8 +5,8 @@ import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/my-list/:movieId", auth, myListController.addToMyList);
-router.get("/my-list", auth, myListController.getMyList);
-router.delete("/my-list/:movieId", auth, myListController.removeFromMyList);
+router.post("/:movieId", auth, myListController.addToMyList);
+router.get("/", auth, myListController.getMyList);
+router.delete("/:movieId", auth, myListController.removeFromMyList);
 
 export default router;
