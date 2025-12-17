@@ -4,6 +4,7 @@ import "dotenv/config"
 import connectDB from "../config/database.js";
 import UserRoute from "../src/routes/UserRoute.js"
 import MovieRoute from "./routes/movieRoutes.js"
+import ListRoute from "./routes/myListRoute.js"
 
 const app = express();
 app.use(express.json());
@@ -17,6 +18,7 @@ app.get("/test", (req, res)=> {
 
 app.use("/user", UserRoute);
 app.use("/movies", MovieRoute)
+app.use("/list", ListRoute);
 
 const PORT = process.env.PORT || 8000;
 

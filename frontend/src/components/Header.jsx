@@ -52,14 +52,7 @@ const Header = () => {
               >
                 Movies
               </Link>
-              <Link
-                to="/series"
-                className={`inline-block px-3 py-1 rounded transition-colors ${
-                  active === "series" ? "bg-yellow-400 text-black" : "text-gray-300 hover:text-yellow-400"
-                }`}
-              >
-                Series
-              </Link>
+             
               <Link
                 to="/my-list"
                 className={`inline-block px-3 py-1 rounded transition-colors ${
