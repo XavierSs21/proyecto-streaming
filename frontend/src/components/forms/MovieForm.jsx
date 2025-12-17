@@ -1,3 +1,4 @@
+// import { useEffect } from "react";
 // import { useForm } from "@tanstack/react-form";
 // import { zodValidator } from "@tanstack/zod-form-adapter";
 // import * as z from "zod";
@@ -12,10 +13,11 @@
 //   SelectTrigger,
 //   SelectValue,
 // } from "@/components/ui/select";
+
 // import ThumbnailUploader from "./ThumbnailUploader";
 
 // /* =========================
-//    GÉNEROS (ENUM BACKEND)
+//    GÉNEROS
 // ========================= */
 // const GENRES = [
 //   "Accion",
@@ -33,33 +35,17 @@
 //   title: z.string().min(1, "El título es obligatorio"),
 //   description: z.string().optional(),
 //   director: z.string().optional(),
-//   year: z
-//     .number()
-//     .min(1800, "Año inválido")
-//     .max(new Date().getFullYear() + 5, "Año inválido")
-//     .optional(),
-//   duration: z.number().min(1, "Duración inválida").optional(),
-//   genre: z.enum(GENRES, {
-//     errorMap: () => ({ message: "Selecciona un género" }),
-//   }),
-//   videoUrl: z.string().url("URL del video inválida"),
-//   thumbnailUrl: z.string().url("URL de imagen inválida").optional(),
+//   year: z.any().optional(),
+//   duration: z.any().optional(),
+//   genre: z.enum(GENRES),
+//   video: z.any().optional(),
+//   thumbnail: z.any().optional(),
 // });
 
 // /* =========================
-//    ERROR TEXT
+//    COMPONENTE
 // ========================= */
-// const ErrorText = ({ field }) =>
-//   field.state.meta.errors?.length > 0 ? (
-//     <p className="text-red-500 text-sm">
-//       {field.state.meta.errors[0]?.message}
-//     </p>
-//   ) : null;
-
-// /* =========================
-//    COMPONENT
-// ========================= */
-// const MovieForm = ({ onSubmit, isLoading = false }) => {
+// const MovieForm = ({ movie, onSubmit, isLoading = false }) => {
 //   const form = useForm({
 //     defaultValues: {
 //       title: "",
@@ -67,27 +53,50 @@
 //       director: "",
 //       year: "",
 //       duration: "",
-//       genre: "",
-//       videoUrl: "",
-//       thumbnailUrl: "",
+//       genre: undefined,
+//       video: null,
+//       thumbnail: null,
 //     },
 
 //     validatorAdapter: zodValidator(),
-
-//     validators: {
-//       onSubmit: movieSchema,
-//     },
+//     validators: { onSubmit: movieSchema },
 
 //     onSubmit: async ({ value }) => {
-//       const payload = {
-//         ...value,
-//         year: value.year ? Number(value.year) : undefined,
-//         duration: value.duration ? Number(value.duration) : undefined,
-//       };
+//       const formData = new FormData();
 
-//       await onSubmit(payload);
+//       formData.append("title", value.title);
+//       formData.append("description", value.description || "");
+//       formData.append("director", value.director || "");
+//       formData.append("genre", value.genre);
+
+//       if (value.year) formData.append("year", value.year);
+//       if (value.duration) formData.append("duration", value.duration);
+
+//       // Solo reemplaza si se sube nuevo archivo
+//       if (value.video) formData.append("video", value.video);
+//       if (value.thumbnail) formData.append("thumbnail", value.thumbnail);
+
+//       await onSubmit(formData);
 //     },
 //   });
+
+//   /* =========================
+//      CARGAR DATOS AL EDITAR
+//   ========================= */
+//   useEffect(() => {
+//     if (!movie) return;
+
+//     form.reset({
+//       title: movie.title ?? "",
+//       description: movie.description ?? "",
+//       director: movie.director ?? "",
+//       year: movie.year ?? "",
+//       duration: movie.duration ?? "",
+//       genre: movie.genre ?? undefined,
+//       video: null,
+//       thumbnail: movie.thumbnailUrl ?? null,
+//     });
+//   }, [movie, form]);
 
 //   return (
 //     <form
@@ -95,20 +104,17 @@
 //         e.preventDefault();
 //         form.handleSubmit();
 //       }}
-//       className="space-y-5"
+//       className="space-y-6"
 //     >
 //       {/* TÍTULO */}
 //       <form.Field name="title">
 //         {(field) => (
 //           <div className="space-y-2">
-//             <Label className="text-gray-300">Título</Label>
+//             <Label>Título</Label>
 //             <Input
-//               placeholder="Inception"
-//               className="bg-zinc-900/50 border-zinc-800 text-white"
 //               value={field.state.value}
 //               onChange={(e) => field.handleChange(e.target.value)}
 //             />
-//             <ErrorText field={field} />
 //           </div>
 //         )}
 //       </form.Field>
@@ -117,10 +123,8 @@
 //       <form.Field name="description">
 //         {(field) => (
 //           <div className="space-y-2">
-//             <Label className="text-gray-300">Descripción</Label>
+//             <Label>Descripción</Label>
 //             <Input
-//               placeholder="Breve descripción"
-//               className="bg-zinc-900/50 border-zinc-800 text-white"
 //               value={field.state.value}
 //               onChange={(e) => field.handleChange(e.target.value)}
 //             />
@@ -129,14 +133,12 @@
 //       </form.Field>
 
 //       {/* DIRECTOR + AÑO */}
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//       <div className="grid grid-cols-2 gap-4">
 //         <form.Field name="director">
 //           {(field) => (
 //             <div className="space-y-2">
-//               <Label className="text-gray-300">Director</Label>
+//               <Label>Director</Label>
 //               <Input
-//                 placeholder="Christopher Nolan"
-//                 className="bg-zinc-900/50 border-zinc-800 text-white"
 //                 value={field.state.value}
 //                 onChange={(e) => field.handleChange(e.target.value)}
 //               />
@@ -147,127 +149,112 @@
 //         <form.Field name="year">
 //           {(field) => (
 //             <div className="space-y-2">
-//               <Label className="text-gray-300">Año</Label>
+//               <Label>Año</Label>
 //               <Input
 //                 type="number"
-//                 placeholder="2010"
-//                 className="bg-zinc-900/50 border-zinc-800 text-white"
 //                 value={field.state.value}
-//                 onChange={(e) =>
-//                   field.handleChange(
-//                     e.target.value ? Number(e.target.value) : ""
-//                   )
-//                 }
+//                 onChange={(e) => field.handleChange(e.target.value)}
 //               />
-//               <ErrorText field={field} />
 //             </div>
 //           )}
 //         </form.Field>
 //       </div>
 
 //       {/* DURACIÓN + GÉNERO */}
-//       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//       <div className="grid grid-cols-2 gap-4">
 //         <form.Field name="duration">
 //           {(field) => (
 //             <div className="space-y-2">
-//               <Label className="text-gray-300">Duración (min)</Label>
+//               <Label>Duración (min)</Label>
 //               <Input
 //                 type="number"
-//                 placeholder="148"
-//                 className="bg-zinc-900/50 border-zinc-800 text-white"
 //                 value={field.state.value}
-//                 onChange={(e) =>
-//                   field.handleChange(
-//                     e.target.value ? Number(e.target.value) : ""
-//                   )
-//                 }
+//                 onChange={(e) => field.handleChange(e.target.value)}
 //               />
-//               <ErrorText field={field} />
 //             </div>
 //           )}
 //         </form.Field>
 
-//         {/* SELECT SHADCN */}
 //         <form.Field name="genre">
 //           {(field) => (
 //             <div className="space-y-2">
-//               <Label className="text-gray-300">Género</Label>
+//               <Label>Género</Label>
 //               <Select
 //                 value={field.state.value}
 //                 onValueChange={field.handleChange}
 //               >
-//                 <SelectTrigger className="bg-zinc-900/50 border-zinc-800 text-white">
+//                 <SelectTrigger>
 //                   <SelectValue placeholder="Selecciona un género" />
 //                 </SelectTrigger>
-//                 <SelectContent className="bg-zinc-900 border-zinc-800 text-white">
-//                   {GENRES.map((genre) => (
-//                     <SelectItem key={genre} value={genre}>
-//                       {genre}
+//                 <SelectContent>
+//                   {GENRES.map((g) => (
+//                     <SelectItem key={g} value={g}>
+//                       {g}
 //                     </SelectItem>
 //                   ))}
 //                 </SelectContent>
 //               </Select>
-//               <ErrorText field={field} />
 //             </div>
 //           )}
 //         </form.Field>
 //       </div>
 
-//       {/* URL VIDEO */}
-//       <form.Field name="videoUrl">
-//         {(field) => (
+//       {/* VIDEO */}
+//       <div className="space-y-2">
+//         <Label>Video</Label>
+
+//         <Input
+//           type="file"
+//           accept="video/*"
+//           onChange={(e) =>
+//             form.setFieldValue("video", e.target.files?.[0])
+//           }
+//         />
+
+//         {movie?.videoUrl && (
+//           <video
+//             src={movie.videoUrl}
+//             controls
+//             className="w-full rounded-lg"
+//           />
+//         )}
+
+//         {movie && (
+//           <p className="text-xs text-gray-400">
+//             Sube un nuevo video solo si deseas reemplazar el actual
+//           </p>
+//         )}
+//       </div>
+
+//       {/* THUMBNAIL */}
+//                <form.Field name="thumbnail">
+//           {(field) => (
 //           <div className="space-y-2">
-//             <Label className="text-gray-300">URL del video</Label>
-//             <Input
-//               placeholder="https://video.mp4"
-//               className="bg-zinc-900/50 border-zinc-800 text-white"
+//             <Label>Thumbnail</Label>
+//             <ThumbnailUploader
 //               value={field.state.value}
-//               onChange={(e) => field.handleChange(e.target.value)}
+//               onChange={field.handleChange}
 //             />
-//             <ErrorText field={field} />
 //           </div>
 //         )}
 //       </form.Field>
-
-//       {/* THUMBNAIL */}
-//       {/* <form.Field name="thumbnailUrl">
+    
+//       {/* <form.Field name="thumbnail">
 //         {(field) => (
 //           <div className="space-y-2">
-//             <Label className="text-gray-300">Thumbnail (opcional)</Label>
-//             <Input
-//               placeholder="https://imagen.jpg"
-//               className="bg-zinc-900/50 border-zinc-800 text-white"
+//             <Label>Thumbnail</Label>
+//             <ThumbnailUploader
 //               value={field.state.value}
-//               onChange={(e) => field.handleChange(e.target.value)}
+//               previewUrl={movie?.thumbnailUrl}
+//               onChange={field.handleChange}
 //             />
 //           </div>
 //         )}
 //       </form.Field> */}
-//       <form.Field name="thumbnail">
-//   {(field) => (
-//     <div className="space-y-2">
-//       <Label className="text-gray-300">Thumbnail</Label>
-
-//       {/* <ThumbnailUploader
-//         value={field.state.value}
-//         onChange={field.handleChange}
-//       /> */}
-//       <ThumbnailUploader value={field.state.value}
-//         onChange={field.handleChange} />
-//     </div>
-//   )}
-// </form.Field>
-
-
-
 
 //       {/* SUBMIT */}
-//       <Button
-//         type="submit"
-//         className="w-full bg-amber-500 hover:bg-amber-600 text-black font-semibold h-11"
-//         disabled={isLoading}
-//       >
-//         {isLoading ? "Subiendo película..." : "Subir película"}
+//       <Button type="submit" disabled={isLoading} className="w-full">
+//         {movie ? "Guardar cambios" : "Subir Película"}
 //       </Button>
 //     </form>
 //   );
@@ -275,9 +262,11 @@
 
 // export default MovieForm;
 
+import { useEffect } from "react";
 import { useForm } from "@tanstack/react-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import * as z from "zod";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -293,7 +282,7 @@ import {
 import ThumbnailUploader from "./ThumbnailUploader";
 
 /* =========================
-   GÉNEROS (BACKEND)
+   GÉNEROS
 ========================= */
 const GENRES = [
   "Accion",
@@ -313,25 +302,33 @@ const movieSchema = z.object({
   director: z.string().optional(),
   year: z.any().optional(),
   duration: z.any().optional(),
-  genre: z.enum(GENRES),
-  video: z.any(),
+  genre: z.enum(GENRES).optional(),
+  video: z.any().optional(),
   thumbnail: z.any().optional(),
 });
 
 /* =========================
-   ERROR TEXT
+   DETECTAR CAMBIOS
 ========================= */
-const ErrorText = ({ field }) =>
-  field.state.meta.errors?.length > 0 ? (
-    <p className="text-red-500 text-sm">
-      {field.state.meta.errors[0]?.message}
-    </p>
-  ) : null;
+const hasChanges = (value, movie) => {
+  if (!movie) return true;
+
+  return (
+    value.title !== movie.title ||
+    value.description !== movie.description ||
+    value.director !== movie.director ||
+    Number(value.year) !== Number(movie.year) ||
+    Number(value.duration) !== Number(movie.duration) ||
+    value.genre !== movie.genre ||
+    value.video instanceof File ||
+    value.thumbnail instanceof File
+  );
+};
 
 /* =========================
-   COMPONENT
+   COMPONENTE
 ========================= */
-const MovieForm = ({ onSubmit, isLoading = false }) => {
+const MovieForm = ({ movie, onSubmit, isLoading = false }) => {
   const form = useForm({
     defaultValues: {
       title: "",
@@ -339,7 +336,7 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
       director: "",
       year: "",
       duration: "",
-      genre: "",
+      genre: undefined,
       video: null,
       thumbnail: null,
     },
@@ -348,25 +345,58 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
     validators: { onSubmit: movieSchema },
 
     onSubmit: async ({ value }) => {
+      if (movie && !hasChanges(value, movie)) {
+        toast.info("No hay cambios para guardar");
+        return;
+      }
+
       const formData = new FormData();
 
-      formData.append("title", value.title);
-      formData.append("description", value.description || "");
-      formData.append("director", value.director || "");
-      formData.append("genre", value.genre);
+      if (value.title !== movie?.title)
+        formData.append("title", value.title);
 
-      if (value.year) formData.append("year", value.year);
-      if (value.duration) formData.append("duration", value.duration);
+      if (value.description !== movie?.description)
+        formData.append("description", value.description || "");
 
-      // ARCHIVOS
-      formData.append("video", value.video);
-      if (value.thumbnail) {
+      if (value.director !== movie?.director)
+        formData.append("director", value.director || "");
+
+      if (value.genre && value.genre !== movie?.genre)
+        formData.append("genre", value.genre);
+
+      if (value.year && Number(value.year) !== Number(movie?.year))
+        formData.append("year", value.year);
+
+      if (value.duration && Number(value.duration) !== Number(movie?.duration))
+        formData.append("duration", value.duration);
+
+      if (value.video instanceof File)
+        formData.append("video", value.video);
+
+      if (value.thumbnail instanceof File)
         formData.append("thumbnail", value.thumbnail);
-      }
 
       await onSubmit(formData);
     },
   });
+
+  /* =========================
+     CARGAR DATOS AL EDITAR
+  ========================= */
+  useEffect(() => {
+    if (!movie) return;
+
+    form.reset({
+      title: movie.title ?? "",
+      description: movie.description ?? "",
+      director: movie.director ?? "",
+      year: movie.year ?? "",
+      duration: movie.duration ?? "",
+      genre: movie.genre ?? undefined,
+      video: null,
+      thumbnail: null,
+    });
+  }, [movie, form]);
 
   return (
     <form
@@ -382,11 +412,9 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
           <div className="space-y-2">
             <Label>Título</Label>
             <Input
-              placeholder="Inception"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
             />
-            <ErrorText field={field} />
           </div>
         )}
       </form.Field>
@@ -397,7 +425,6 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
           <div className="space-y-2">
             <Label>Descripción</Label>
             <Input
-              placeholder="Breve descripción"
               value={field.state.value}
               onChange={(e) => field.handleChange(e.target.value)}
             />
@@ -460,33 +487,39 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
                   <SelectValue placeholder="Selecciona un género" />
                 </SelectTrigger>
                 <SelectContent>
-                  {GENRES.map((genre) => (
-                    <SelectItem key={genre} value={genre}>
-                      {genre}
+                  {GENRES.map((g) => (
+                    <SelectItem key={g} value={g}>
+                      {g}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <ErrorText field={field} />
             </div>
           )}
         </form.Field>
       </div>
 
       {/* VIDEO */}
-      <form.Field name="video">
-        {(field) => (
-          <div className="space-y-2">
-            <Label>Video (MP4)</Label>
-            <Input
-              type="file"
-              accept="video/*"
-              onChange={(e) => field.handleChange(e.target.files?.[0])}
-            />
-            <ErrorText field={field} />
-          </div>
+      <div className="space-y-2">
+        <Label>Video</Label>
+        <Input
+          type="file"
+          accept="video/*"
+          onChange={(e) =>
+            form.setFieldValue("video", e.target.files?.[0] ?? null)
+          }
+        />
+
+        {movie?.videoUrl && (
+          <video src={movie.videoUrl} controls className="w-full rounded-lg" />
         )}
-      </form.Field>
+
+        {movie && (
+          <p className="text-xs text-gray-400">
+            Sube un nuevo video solo si deseas reemplazar el actual
+          </p>
+        )}
+      </div>
 
       {/* THUMBNAIL */}
       <form.Field name="thumbnail">
@@ -495,6 +528,7 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
             <Label>Thumbnail</Label>
             <ThumbnailUploader
               value={field.state.value}
+              previewUrl={movie?.thumbnailUrl}
               onChange={field.handleChange}
             />
           </div>
@@ -503,10 +537,11 @@ const MovieForm = ({ onSubmit, isLoading = false }) => {
 
       {/* SUBMIT */}
       <Button type="submit" disabled={isLoading} className="w-full">
-        {isLoading ? "Subiendo..." : "Subir Película"}
+        {movie ? "Guardar cambios" : "Subir Película"}
       </Button>
     </form>
   );
 };
 
 export default MovieForm;
+

@@ -16,7 +16,7 @@ const makeAdmin = async (email) => {
       process.exit(1);
     }
     
-    user.rol = 'administrador';
+    user.rol = 'admin';
     await user.save();
     
     console.log('Usuario actualizado exitosamente:');

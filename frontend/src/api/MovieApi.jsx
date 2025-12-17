@@ -3,19 +3,16 @@ import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-/* =========================
-   HELPERS
-========================= */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
+  if(!token) return {};
   return {
     Authorization: `Bearer ${token}`,
   };
 };
 
-/* =========================
-   CREATE MOVIE (ADMIN)
-========================= */
+
+
 export const useCreateMovie = () => {
   const queryClient = useQueryClient();
 
@@ -51,7 +48,10 @@ export const useGetAllMovies = () => {
   return useQuery({
     queryKey: ["movies"],
     queryFn: async () => {
-      const res = await fetch(`${API_BASE_URL}/movies`);
+      const res = await fetch(`${API_BASE_URL}/movies`, {
+        headers: getAuthHeaders(),
+      });
+
       const json = await res.json();
       if (!res.ok)
         throw new Error(json.message || "Error al obtener películas");

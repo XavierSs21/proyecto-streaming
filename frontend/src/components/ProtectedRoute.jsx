@@ -1,23 +1,20 @@
-
-import { useAuth } from "@/api/auth";
 import { Navigate, Outlet } from "react-router-dom";
+import { useGetCurrentUser } from "@/api/UserApi";
 
+const ProtectedRoute = ({ allowedRoles }) => {
+  const { data: user, isLoading, isError } = useGetCurrentUser();
 
-const ProtectedRoute = () => {
-  const { isAuthenticated, isAdmin } = useAuth()
+  if (isLoading) return <p>Cargando...</p>;
 
-  if (!isAuthenticated) {
+  if (isError || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!isAdmin) {
-    return <Navigate to="/" replace />;
-  }else if (isAdmin){
-    return <Navigate to="/admin-page" replace/>;
+  if (!allowedRoles.includes(user.rol)) {
+    return <Navigate to="/home-page" replace />;
   }
 
   return <Outlet />;
 };
 
 export default ProtectedRoute;
-
