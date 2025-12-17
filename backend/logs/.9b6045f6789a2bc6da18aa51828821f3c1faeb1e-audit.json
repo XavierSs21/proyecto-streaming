@@ -1,0 +1,20 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/palomafernandez/Desktop/proyecto-streaming/backend/logs/.9b6045f6789a2bc6da18aa51828821f3c1faeb1e-audit.json",
+    "files": [
+        {
+            "date": 1765949668634,
+            "name": "/Users/palomafernandez/Desktop/proyecto-streaming/backend/logs/combined-2025-12-16.log",
+            "hash": "7448ed497ef1ab1fbc663fbd186e56fc87435cb4a82b4882589e94f754d84043"
+        },
+        {
+            "date": 1765952295353,
+            "name": "/Users/palomafernandez/Desktop/proyecto-streaming/backend/logs/combined-2025-12-17.log",
+            "hash": "7321924f08d9ac42677601d7f30a0fa3d2ad1dcb8f8395a03aaa5be29af45ce1"
+        }
+    ],
+    "hashType": "sha256"
+}
