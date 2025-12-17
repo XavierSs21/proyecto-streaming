@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const genres = [
-  "Acción", "Aventura", "Animación", "Biografía", "Comedia", "Crimen", 
+  "Accion", "Aventura", "Animación", "Biografía", "Comedia", "Crimen", 
   "Documental", "Drama", "Familiar", "Fantasía", "Film-Noir", "Historia", 
   "Terror", "Musical", "Misterio", "Romance", "Ciencia Ficción", 
   "Corto", "Deporte", "Superhéroes", "Suspenso", "Bélico", "Western"

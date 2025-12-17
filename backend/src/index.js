@@ -4,6 +4,7 @@ import "dotenv/config"
 import connectDB from "../config/database.js";
 import UserRoute from "../src/routes/UserRoute.js"
 import MovieRoute from "./routes/movieRoutes.js"
+import ListRoute from "./routes/myListRoute.js"
 
 import logger from "../config/logger.js";
 import morganMiddleware from "./middleware/morganMiddleware.js";
@@ -32,6 +33,7 @@ app.get("/test", (req, res)=> {
 
 app.use("/user", UserRoute);
 app.use("/movies", MovieRoute)
+app.use("/list", ListRoute);
 
 app.get("/health", (req, res) => {
   logger.info('Health check solicitado');

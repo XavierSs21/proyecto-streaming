@@ -3,11 +3,9 @@ import { toast } from "sonner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-/* =========================
-   HELPERS
-========================= */
 const getAuthHeaders = () => {
   const token = localStorage.getItem("token");
+  if(!token) return {};
   return {
     Authorization: `Bearer ${token}`,
   };

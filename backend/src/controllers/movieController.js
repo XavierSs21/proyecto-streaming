@@ -27,7 +27,7 @@ const createMovie = async (req, res) => {
       genre,
       videoUrl: video.location,
       thumbnailUrl: thumbnail?.location,
-      uploadedBy: req.userId      
+      uploadedBy: req.user._id,     
     });
 
     res.status(201).json(movie);
@@ -68,40 +68,79 @@ const getMovieById = async (req, res) => {
   }
 };
 
+// const updateMovie = async (req, res) => {
+//   try {
+//     const {
+//       title,
+//       description,
+//       director,
+//       year,
+//       duration,
+//       genre
+//     } = req.body;
+
+//     const video = req.files?.video?.[0];
+//     const thumbnail = req.files?.thumbnail?.[0];
+
+//     const updateData = {
+//       title,
+//       description,
+//       director,
+//       year,
+//       duration,
+//       genre
+//     };
+
+//     if (video) {
+//       updateData.videoUrl = video.location;
+//     }
+//     if (thumbnail) {
+//       updateData.thumbnailUrl = thumbnail.location;
+//     }
+
+//     const movie = await Movie.findByIdAndUpdate(
+//       req.params.id,
+//       updateData,
+//       { new: true }
+//     );
+
+//     if (!movie) {
+//       return res.status(404).json({ message: "Película no encontrada" });
+//     }
+
+//     res.json(movie);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Error al actualizar película" });
+//   }
+// };
+
 const updateMovie = async (req, res) => {
   try {
-    const {
-      title,
-      description,
-      director,
-      year,
-      duration,
-      genre
-    } = req.body;
+    const { title, description, director, year, duration, genre } = req.body;
 
     const video = req.files?.video?.[0];
     const thumbnail = req.files?.thumbnail?.[0];
 
-    const updateData = {
-      title,
-      description,
-      director,
-      year,
-      duration,
-      genre
-    };
+    // 1) Construye update SOLO con campos que sí llegaron
+    const updateData = {};
 
-    if (video) {
-      updateData.videoUrl = video.location;
-    }
-    if (thumbnail) {
-      updateData.thumbnailUrl = thumbnail.location;
-    }
+    if (title !== undefined) updateData.title = title;
+    if (description !== undefined) updateData.description = description;
+    if (director !== undefined) updateData.director = director;
+
+    if (year !== undefined) updateData.year = year;
+    if (duration !== undefined) updateData.duration = duration;
+    if (genre !== undefined) updateData.genre = genre;
+
+    // 2) Archivos (solo si vienen)
+    if (video) updateData.videoUrl = video.location;
+    if (thumbnail) updateData.thumbnailUrl = thumbnail.location;
 
     const movie = await Movie.findByIdAndUpdate(
       req.params.id,
-      updateData,
-      { new: true }
+      { $set: updateData },
+      { new: true, runValidators: true }
     );
 
     if (!movie) {
@@ -114,6 +153,9 @@ const updateMovie = async (req, res) => {
     res.status(500).json({ message: "Error al actualizar película" });
   }
 };
+
+
+
 const deleteMovie = async (req, res) => {
   try {
     const movie = await Movie.findByIdAndDelete(req.params.id);
