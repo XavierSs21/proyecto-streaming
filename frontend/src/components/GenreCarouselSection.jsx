@@ -17,16 +17,15 @@ const fallbackThumb =
 export default function GenreCarouselSection({ genre, title }) {
   const { data: movies = [], isLoading, isError } = useGetMoviesByGenre(genre);
 
-  if (isLoading) {
+  if (isLoading) return <p className="px-6">Cargando...</p>;
+
+  if (!movies.length)
     return (
-      <section className="mt-12">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-400">
-          {title || genre}
-        </h2>
-        <p className="text-gray-400">Cargando...</p>
+      <section className="px-6 mt-10">
+        <h2 className="text-xl font-bold text-yellow-400">{title}</h2>
+        <p className="text-gray-400 mt-2">No hay películas en este género</p>
       </section>
     );
-  }
 
   if (isError) {
     return (
